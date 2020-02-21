@@ -16,10 +16,9 @@
                     </div>
                 </div>
             </div>
-            <FormSteps v-for="(item, name) in data"
-                       :options=item
-                       :name=name
-                       :key=Math.random()
+            <FormSteps
+                       :options=optionValue
+                       :name=nameValue
                        :changeResult=changeResult
             ></FormSteps>
             <button class="btn btn-success" v-if="formEnd === true" v-on:click="()=>savePdf()">download PDF</button>
@@ -66,10 +65,12 @@
                     this.data = response.data;
                     this.form = false;
                     this.count = Object.keys(this.data).length;
+                    this.nextStep();
                 });
             },
             changeResult: function (key, value) {
                 this.result.push({key, value});
+                this.nextStep();
                 if (Object.keys(this.result).length === this.count-1)
                     this.formEnd = true;
             },
@@ -84,8 +85,8 @@
                     })
             },
             nextStep:function () {
-                this.optionValue = Object.values(this.data)[0];
-                this.nameValue = Object.values(this.data)[0];
+                this.optionValue = Object.values(this.data)[this.currentStep];
+                this.nameValue = Object.keys(this.data)[this.currentStep];
 
                 this.currentStep++;
             }
