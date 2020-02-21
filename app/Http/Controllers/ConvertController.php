@@ -23,7 +23,7 @@ class ConvertController extends Controller
         foreach ($filesData as $data)
             $result = array_merge_recursive ($result, $data);
         foreach ($result as $k=>$v){
-            if(strpos($k, 'Filter:') === false){
+            if(strpos($k, 'Filter:') === false || $v[0]===''){
                 unset($result[$k]);
             }
         }

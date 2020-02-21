@@ -22,6 +22,7 @@
                        :key=Math.random()
                        :changeResult=changeResult
             ></FormSteps>
+            <button class="btn btn-success" v-if="formEnd === true" v-on:click="()=>savePdf()">download PDF</button>
         </div>
 
     </div>
@@ -36,11 +37,13 @@
             return {
                 file: '',
                 data: '',
-
+                result: [],
                 count: '',
-                steps: {},
                 form: true,
-                endCount: 0
+                formEnd:false,
+                currentStep: 0,
+                nameValue: '',
+                optionValue: [],
             }
         },
         methods: {
@@ -61,24 +64,30 @@
             uploadFile() {
                 axios.post('/api/file', {file: this.file}).then(response => {
                     this.data = response.data;
-                    console.log(this.data);
                     this.form = false;
                     this.count = Object.keys(this.data).length;
                 });
             },
             changeResult: function (key, value) {
                 this.result.push({key, value});
-                this.endCount++;
-                if (Object.keys(this.result).length === this.count) {
-                    axios.post('/api/get-pdf', {result:this.result}, {responseType: 'arraybuffer'})
-                .then(response => {
-                    let blob = new Blob([response.data], { type: 'application/pdf'})
-                    let link = document.createElement('a')
-                    link.href = window.URL.createObjectURL(blob)
-                    link.download = 'test.pdf'
-                    link.click()
-                })
-                }
+                if (Object.keys(this.result).length === this.count-1)
+                    this.formEnd = true;
+            },
+            savePdf: function () {
+                axios.post('/api/get-pdf', {result:this.result}, {responseType: 'arraybuffer'})
+                    .then(response => {
+                        let blob = new Blob([response.data], { type: 'application/pdf'})
+                        let link = document.createElement('a')
+                        link.href = window.URL.createObjectURL(blob)
+                        link.download = 'test.pdf'
+                        link.click()
+                    })
+            },
+            nextStep:function () {
+                this.optionValue = Object.values(this.data)[0];
+                this.nameValue = Object.values(this.data)[0];
+
+                this.currentStep++;
             }
         }
     }
