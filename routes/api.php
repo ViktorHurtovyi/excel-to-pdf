@@ -13,6 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::post('/file', 'ConvertController@posted')->name('file');
+Route::post('/get-pdf', 'ConvertController@createPdf');

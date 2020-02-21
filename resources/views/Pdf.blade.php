@@ -6,24 +6,16 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
-<table class="table table-striped">
-    <thead>
-    <th>ID</th>
-    <th>Show Name</th>
-    <th>Series</th>
-    <th>Lead Actor</th>
-    <th>Action</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1</td>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+
+        @foreach($show as $r)
+            {{$r['key']}}: {{$r['value']}}
+        <br><br><br>
+        @endforeach
+
+</div>
 </body>
 </html>

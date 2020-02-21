@@ -32,11 +32,9 @@ class ConvertController extends Controller
 
     public function createPdf(Request $request)
     {
-//        return view('pdf'
-////            , compact('shows')
-//        );
-        $pdf = PDF::loadView('pdf');
+        $show = $request->result;
 
+        $pdf = PDF::loadView('pdf', compact('show'));
         return $pdf->download('disney.pdf');
     }
 }

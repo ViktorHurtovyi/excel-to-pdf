@@ -12,5 +12,3 @@
 */
 
 Route::get('/', 'ConvertController@index');
-Route::post('/file', 'ConvertController@posted')->name('file');
-Route::get('/get-pdf', 'ConvertController@createPdf');
