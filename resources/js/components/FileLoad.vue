@@ -3,7 +3,6 @@
         <div class="row justify-content-center">
             <div class="col-md-8" v-if="form !== false">
                 <div class="card card-default">
-                    <div class="card-header">File Upload Component</div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -16,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <FormSteps
+            <FormSteps v-if="form !== true && end === false"
                        :options=optionValue
                        :name=nameValue
                        :changeResult=changeResult
@@ -39,10 +38,11 @@
                 result: [],
                 count: '',
                 form: true,
-                formEnd:false,
+                formEnd: false,
                 currentStep: 0,
                 nameValue: '',
                 optionValue: [],
+                end: false,
             }
         },
         methods: {
@@ -50,18 +50,16 @@
                 let files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
                     return;
-                this.createFile(files[0]);
-            },
-            createFile(file) {
-                let reader = new FileReader();
-                let vm = this;
-                reader.onload = (e) => {
-                    vm.file = e.target.result;
-                };
-                reader.readAsDataURL(file);
+                this.file = e.target.files[0];
             },
             uploadFile() {
-                axios.post('/api/file', {file: this.file}).then(response => {
+                const config = {
+                    headers: {'content-type': 'multipart/form-data'}
+                };
+                let formData = new FormData();
+                formData.append('file', this.file);
+
+                axios.post('/api/file', formData, config).then(response => {
                     this.data = response.data;
                     this.form = false;
                     this.count = Object.keys(this.data).length;
@@ -71,24 +69,27 @@
             changeResult: function (key, value) {
                 this.result.push({key, value});
                 this.nextStep();
-                if (Object.keys(this.result).length === this.count-1)
+                if (Object.keys(this.result).length === this.count)
                     this.formEnd = true;
             },
             savePdf: function () {
-                axios.post('/api/get-pdf', {result:this.result}, {responseType: 'arraybuffer'})
+                axios.post('/api/get-pdf', {result: this.result}, {responseType: 'arraybuffer'})
                     .then(response => {
-                        let blob = new Blob([response.data], { type: 'application/pdf'})
-                        let link = document.createElement('a')
-                        link.href = window.URL.createObjectURL(blob)
-                        link.download = 'test.pdf'
+                        let blob = new Blob([response.data], {type: 'application/pdf'});
+                        let link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'test.pdf';
                         link.click()
                     })
             },
-            nextStep:function () {
-                this.optionValue = Object.values(this.data)[this.currentStep];
-                this.nameValue = Object.keys(this.data)[this.currentStep];
-
-                this.currentStep++;
+            nextStep: function () {
+                if (this.count !== this.currentStep) {
+                    this.optionValue = Object.values(this.data)[this.currentStep];
+                    this.nameValue = Object.keys(this.data)[this.currentStep];
+                    this.currentStep++;
+                }else{
+                    this.end = true;
+                }
             }
         }
     }

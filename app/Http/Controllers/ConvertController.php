@@ -16,8 +16,7 @@ class ConvertController extends Controller
 
     public function posted(Request $request)
     {
-//        $fullpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . Storage::putFile('files', $request->file('file'));
-        $fullpath = "C:\proj\saveFile\storage\app/files/dHtOYHnjQ294KiFBJgEJqdRRS9loDLx8svKJIfxs.xlsx";
+        $fullpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . Storage::putFile('files', $request->file('file'));
         $filesData = (new FastExcel)->import($fullpath)->where('Filter:Anlass', '!=', '');
         $result = [];
         foreach ($filesData as $data)

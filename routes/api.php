@@ -14,5 +14,5 @@ use Illuminate\Http\Request;
 */
 
 
-Route::post('/file', 'ConvertController@posted')->name('file');
+Route::post('/file', 'ConvertController@posted');
 Route::post('/get-pdf', 'ConvertController@createPdf');
