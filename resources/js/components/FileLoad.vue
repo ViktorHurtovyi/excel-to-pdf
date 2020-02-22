@@ -1,36 +1,28 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8" v-if="form !== false">
-                <div class="card card-default">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="file" v-on:change="onFileChange" class="form-control">
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-success btn-block" @click="uploadFile">Upload File</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <FormSteps v-if="form !== true && end === false"
+            <FileUpload  v-if="form !== false"
+                :onFileChange="onFileChange"
+                :uploadFile="uploadFile"
+            >
+            </FileUpload>
+            <h4 v-if="error===true">Something went wrong! Please try later!</h4>
+            <FormSteps v-if="form !== true && end === false && error===false"
                        :options=optionValue
                        :name=nameValue
                        :changeResult=changeResult
             ></FormSteps>
             <button class="btn btn-success" v-if="formEnd === true" v-on:click="()=>savePdf()">download PDF</button>
         </div>
-
     </div>
 </template>
 
 <script>
     import FormSteps from "./form-steps";
+    import FileUpload from "./file-upload";
 
     export default {
-        components: {FormSteps},
+        components: {FormSteps, FileUpload},
         data() {
             return {
                 file: '',
@@ -43,6 +35,7 @@
                 nameValue: '',
                 optionValue: [],
                 end: false,
+                error: false,
             }
         },
         methods: {
@@ -64,6 +57,9 @@
                     this.form = false;
                     this.count = Object.keys(this.data).length;
                     this.nextStep();
+                }).catch(err => {
+                    this.error = true;
+                    this.form = false;
                 });
             },
             changeResult: function (key, value) {
