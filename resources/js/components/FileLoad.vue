@@ -19,8 +19,8 @@
 </template>
 
 <script>
-    import FormSteps from "./form-steps";
-    import FileUpload from "./file-upload";
+    import FormSteps from "./steps-form/steps-form";
+    import FileUpload from "./file-upload-form/file-upload";
 
     export default {
         components: {FormSteps, FileUpload},

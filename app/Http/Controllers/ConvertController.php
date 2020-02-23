@@ -11,10 +11,10 @@ class ConvertController extends Controller
 {
     public function index()
     {
-        return view('welcome');
+        return view('form');
     }
 
-    public function posted(Request $request)
+    public function userFile(Request $request)
     {
         $this->validate($request, [
            'file' => 'required|mimes:xlsx'
