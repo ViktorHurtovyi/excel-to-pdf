@@ -1,22 +1,17 @@
 <template>
-    <div class="col-md-8">
-        <div class="card card-default">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="file" v-on:change="onFileChange" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-success btn-block" @click="uploadFile">Upload File</button>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-md-6 offset-2">
+            <input type="file" v-on:change="onFileChange" class="custom-file-input" id="input-file">
+            <label class="custom-file-label" for="input-file">Choose file...</label>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary btn-block" @click="uploadFile">Upload File</button>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['uploadFile','onFileChange'],
+        props: ['uploadFile', 'onFileChange'],
     }
 </script>

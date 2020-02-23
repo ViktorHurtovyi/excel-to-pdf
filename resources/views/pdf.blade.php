@@ -10,12 +10,12 @@
 </head>
 <body>
 <div class="container">
-
+    <div class="">
         @foreach($show as $r)
-            {{$r['key']}}: {{$r['value']}}
-        <br><br><br>
+            <strong>{{$r['key']}}:</strong> {{$r['value']}}
+            <br><br><br>
         @endforeach
-
+    </div>
 </div>
 </body>
 </html>

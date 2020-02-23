@@ -1,4 +1,4 @@
-import FileLoad from "./components/FileLoad";
+import Index from "./components/index";
 
 
 /**
@@ -17,7 +17,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('image-component', FileLoad);
+Vue.component('image-component', Index);
 
 const app = new Vue({
     el: '#app'

@@ -1,20 +1,29 @@
 <template>
-    <div class="container">
+    <div class="h-100 justify-content-center align-items-center">
         <div class="row justify-content-center">
-                <FileUpload v-if="form !== false"
-                            :onFileChange="onFileChange"
-                            :uploadFile="uploadFile"
-                >
-                </FileUpload>
-                <h4 v-if="error===true">Something went wrong! Please try later!</h4>
-                <h4 v-if="errorValidation===true">Wrong file format! Only xlsx files are valid</h4>
-                <FormSteps v-if="form !== true && end === false && error===false"
-                           :options=optionValue
-                           :name=nameValue
-                           :changeResult=changeResult
-                ></FormSteps>
-                <button class="btn btn-success" v-if="formEnd === true" v-on:click="()=>savePdf()">download PDF</button>
+            <div class="col-md-8">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <FileUpload v-if="form !== false"
+                                    :onFileChange="onFileChange"
+                                    :uploadFile="uploadFile"
+                        >
+                        </FileUpload>
+                        <br>
+                        <div  class="alert alert-danger" role="alert" v-if="error===true">Something went wrong! Please try later!</div >
+                        <div  class="alert alert-danger" role="alert" v-if="errorValidation===true">Wrong file format! Only xlsx files are valid</div >
+                        <FormSteps v-if="form !== true && end === false && error===false"
+                                   :options=optionValue
+                                   :title= title
+                                   :changeResult=changeResult
+                        ></FormSteps>
+                        <button class="offset-4 col col-4 btn btn-primary" v-if="formEnd === true" v-on:click="()=>savePdf()">Download
+                            PDF
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
     </div>
 </template>
 
@@ -35,7 +44,7 @@
                 data: '',
                 count: '',
                 currentStep: 0,
-                nameValue: '',
+                title: '',
                 result: [],
                 optionValue: [],
             }
@@ -49,7 +58,7 @@
             },
             uploadFile() {
                 if (this.file === '')
-                    alert ('Please, select the file');
+                    alert('Please, select the file');
                 else {
                     const config = {
                         headers: {'content-type': 'multipart/form-data'}
@@ -64,9 +73,9 @@
                         this.count = Object.keys(this.data).length;
                         this.nextStep();
                     }).catch(error => {
-                        if(error.response.status === 422){
+                        if (error.response.status === 422) {
                             this.errorValidation = true;
-                        }else {
+                        } else {
                             this.error = true;
                             this.form = false;
                         }
@@ -96,7 +105,7 @@
             nextStep: function () {
                 if (this.count !== this.currentStep) {
                     this.optionValue = Object.values(this.data)[this.currentStep];
-                    this.nameValue = Object.keys(this.data)[this.currentStep];
+                    this.title = Object.keys(this.data)[this.currentStep];
                     this.currentStep++;
                 } else {
                     this.end = true;

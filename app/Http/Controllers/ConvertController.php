@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FileUserRequest;
+use App\Services\UserFileService;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Rap2hpoutre\FastExcel\FastExcel;
 
 class ConvertController extends Controller
 {
@@ -14,22 +14,10 @@ class ConvertController extends Controller
         return view('form');
     }
 
-    public function userFile(Request $request)
+    public function userFile(FileUserRequest $request)
     {
-        $this->validate($request, [
-           'file' => 'required|mimes:xlsx'
-        ]);
-
-        $fullpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . Storage::putFile('files', $request->file('file'));
-        $filesData = (new FastExcel)->import($fullpath)->where('Filter:Anlass', '!=', '');
-        $result = [];
-        foreach ($filesData as $data)
-            $result = array_merge_recursive ($result, $data);
-        foreach ($result as $k=>$v){
-            if(strpos($k, 'Filter:') === false || $v[0]===''){
-                unset($result[$k]);
-            }
-        }
+        $service = new UserFileService();
+        $result = $service->userFileToArray($request);
         return response()->json($result);
     }
 
