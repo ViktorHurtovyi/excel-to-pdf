@@ -6,17 +6,14 @@
                     <div class="card-body">
                         <FileUpload v-if="form !== false"
                                     :onFileChange="onFileChange"
-                                    :uploadFile="uploadFile"
-                        >
-                        </FileUpload>
+                                    :uploadFile="uploadFile" />
                         <br>
                         <div  class="alert alert-danger" role="alert" v-if="error===true">Something went wrong! Please try later!</div >
                         <div  class="alert alert-danger" role="alert" v-if="errorValidation===true">Wrong file format! Only xlsx files are valid</div >
                         <FormSteps v-if="form !== true && end === false && error===false"
                                    :options=optionValue
                                    :title= title
-                                   :changeResult=changeResult
-                        ></FormSteps>
+                                   :changeResult=changeResult />
                         <button class="offset-4 col col-4 btn btn-primary" v-if="formEnd === true" v-on:click="()=>savePdf()">Download
                             PDF
                         </button>

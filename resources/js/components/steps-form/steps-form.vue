@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12" style="text-align: center">
             <h2>{{title.replace('Filter:', '')}}</h2>
-            <select :name="name" v-model="selectValue" v-on:change="selectOption" class="col col-8">
+            <select :name="title" v-model="selectValue" v-on:change="selectOption" class="col col-8">
                 <option value="" selected></option>
                 <option v-for="option in options" v-if="option !== ''" v-bind:value="option" :key="option.id">
                     {{option}}
