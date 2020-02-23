@@ -2,7 +2,7 @@
     <div class="h-100 justify-content-center align-items-center">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card card-default">
+                <div class="card card-default" v-if="loading === false">
                     <div class="card-body">
                         <FileUpload v-if="form !== false"
                                     :onFileChange="onFileChange"
@@ -22,6 +22,7 @@
                         </button>
                     </div>
                 </div>
+                <div class="alert alert-primary" role="alert" v-else>loading...</div >
             </div>
         </div>
     </div>
@@ -35,11 +36,12 @@
         components: {FormSteps, FileUpload},
         data() {
             return {
+                loading:false,
+                error: false,
+                errorValidation: false,
                 form: true,
                 formEnd: false,
                 end: false,
-                error: false,
-                errorValidation: false,
                 file: '',
                 data: '',
                 count: '',
@@ -58,29 +60,30 @@
             },
             uploadFile() {
                 if (this.file === '')
-                    alert('Please, select the file');
+                    alert('Please, upload the file');
                 else {
                     const config = {
                         headers: {'content-type': 'multipart/form-data'}
                     };
                     let formData = new FormData();
                     formData.append('file', this.file);
-
+                    this.loading = true;
                     axios.post('/api/file', formData, config).then(response => {
                         this.errorValidation = false;
                         this.data = response.data;
                         this.form = false;
                         this.count = Object.keys(this.data).length;
                         this.nextStep();
+                        this.loading = false;
                     }).catch(error => {
                         if (error.response.status === 422) {
                             this.errorValidation = true;
                         } else {
                             this.error = true;
                             this.form = false;
+                            this.loading = false;
                         }
                     });
-                    this.loading = false;
                 }
             },
             changeResult: function (key, value) {
@@ -90,6 +93,7 @@
                     this.formEnd = true;
             },
             savePdf: function () {
+                this.loading = true;
                 axios.post('/api/get-pdf', {result: this.result}, {responseType: 'arraybuffer'})
                     .then(response => {
                         let blob = new Blob([response.data], {type: 'application/pdf'});
@@ -97,10 +101,12 @@
                         link.href = window.URL.createObjectURL(blob);
                         link.download = 'test.pdf';
                         link.click()
+                        this.loading = false;
                     }).catch(err => {
                     this.error = true;
                     this.form = false;
-                })
+                    this.loading = false;
+                });
             },
             nextStep: function () {
                 if (this.count !== this.currentStep) {

@@ -16,8 +16,7 @@ class ConvertController extends Controller
 
     public function userFile(FileUserRequest $request)
     {
-        $service = new UserFileService();
-        $result = $service->userFileToArray($request);
+        $result = UserFileService::userFileToArray($request);
         return response()->json($result);
     }
 

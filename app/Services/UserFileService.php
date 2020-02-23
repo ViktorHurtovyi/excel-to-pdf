@@ -7,24 +7,24 @@ use Rap2hpoutre\FastExcel\FastExcel;
 class UserFileService
 {
 
-    public function userFileToArray($userData)
+    public static function userFileToArray($userData)
     {
-        $filesData = $this->getData($userData);
-        $result = $this->getResult($filesData);
+        $filesData = self::getData($userData);
+        $result = self::getResult($filesData);
         return $result;
     }
 
-    private function getPath($userData)
+    private static function getPath($userData)
     {
         return storage_path('app/'). Storage::putFile('files', $userData->file('file'));
     }
 
-    private function getData($userData)
+    private static function getData($userData)
     {
         return (new FastExcel)->import(self::getPath($userData))->where('Filter:Anlass', '!=', '');
     }
 
-    private function getResult($filesData){
+    private static function getResult($filesData){
         $result = [];
         foreach ($filesData as $data)
             $result = array_merge_recursive ($result, $data);

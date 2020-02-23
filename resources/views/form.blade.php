@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>File To Form</title>
 </head>
-<body style="background-color: #b8b8b8; margin:15% auto">
+<body style="background-color: #b8b8b85c; margin:15% auto">
 <div class="container" id="app">
     <image-component></image-component>
 </div>
