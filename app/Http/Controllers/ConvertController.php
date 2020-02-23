@@ -16,6 +16,10 @@ class ConvertController extends Controller
 
     public function posted(Request $request)
     {
+        $this->validate($request, [
+           'file' => 'required|mimes:xlsx'
+        ]);
+
         $fullpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . Storage::putFile('files', $request->file('file'));
         $filesData = (new FastExcel)->import($fullpath)->where('Filter:Anlass', '!=', '');
         $result = [];

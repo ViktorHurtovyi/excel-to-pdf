@@ -11,11 +11,6 @@
 <script>
     export default {
         props: ['options','name', 'changeResult'],
-        data(){
-            return {
-
-            }
-        },
         methods: {
             selectOption(e){
                 this.changeResult(this.name.replace('Filter:', ''), e.target.value);
