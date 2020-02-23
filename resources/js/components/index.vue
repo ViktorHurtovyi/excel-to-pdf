@@ -74,6 +74,7 @@
                         this.loading = false;
                     }).catch(error => {
                         if (error.response.status === 422) {
+                            this.loading = false;
                             this.errorValidation = true;
                         } else {
                             this.error = true;
